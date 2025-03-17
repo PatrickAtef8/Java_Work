@@ -16,6 +16,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.awt.FileDialog;
+import java.awt.Frame;
+
+
 
 
 public class NotePad extends Application{
@@ -25,7 +33,7 @@ public class NotePad extends Application{
     Menu File;
     Menu Edit;
     Menu Help;
-    MenuItem New, Open, Save, Exit;
+    MenuItem New, OpenLL, SaveLL, OpenHL, SaveHL ,Exit;
     MenuItem Undo, Cut, Copy, Paste, Delete, SelectAll;
     MenuItem About;
     TextArea ta;
@@ -49,11 +57,13 @@ public class NotePad extends Application{
 
         /* Menu items for file menu */
         New =new MenuItem("New");
-        Open=new MenuItem("Open");
-        Save=new MenuItem("Save");
+        OpenLL=new MenuItem("Open LL");
+        OpenHL=new MenuItem("Open HL");
+        SaveHL=new MenuItem("Save HL");
+        SaveLL=new MenuItem("Save LL");
         Exit=new MenuItem("Exit");
 
-        File.getItems().addAll(New,Open, Save, Exit);
+        File.getItems().addAll(New, OpenLL,SaveLL,OpenHL,SaveHL,Exit);
 
 
         /* Menu items for edit menu */
@@ -153,23 +163,50 @@ public class NotePad extends Application{
                 }
             });
 
-            Open.setOnAction(new EventHandler<ActionEvent>() {
+            OpenLL.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    fileChooser = new FileChooser();
-                    fileChooser.setTitle("Open File");
-                    file = fileChooser.showOpenDialog(null);
-                
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Open File with low level stream");
+                    File file = fileChooser.showOpenDialog(null);
+            
                     if (file != null) {
                         try {
-                            String content = new String(Files.readAllBytes(file.toPath())); 
-                            ta.setText(content); 
+                            FileInputStream fis = new FileInputStream(file);
+                            int size = fis.available();
+                            byte[] b = new byte[size];
+                            fis.read(b);
+                            ta.setText(new String(b));
+                            fis.close();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                 }
             });
+            
+
+
+            OpenHL.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Open File with high-level stream");
+                    File file = fileChooser.showOpenDialog(null);
+            
+                    if (file != null) {
+                        try (DataInputStream dis = new DataInputStream(new FileInputStream(file))) {
+                            byte[] b = new byte[(int) file.length()];
+                            ta.setText(new String(b));
+                            dis.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+            
+
 
 
 
@@ -182,27 +219,58 @@ public class NotePad extends Application{
 
             });
 
-            Save.setOnAction(new EventHandler<ActionEvent>() {
+
+            SaveLL.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                  fileChooser = new FileChooser();
-                  fileChooser.setTitle("Save File");
-                  extFilter = new FileChooser.ExtensionFilter("Text Files (*.txt)", "*.txt");
-                  fileChooser.getExtensionFilters().add(extFilter);
-                  file = fileChooser.showSaveDialog(null);
-
-                        if (file != null) {
-                            try (FileWriter writer = new FileWriter(file)) {
-                                writer.write(ta.getText()); 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Save File with low-level stream");
+                    File file = fileChooser.showSaveDialog(null);
+                    
+                    if (file != null) {
+                        try {
+                            FileOutputStream fos = new FileOutputStream(file);
+                            byte[] b = ta.getText().getBytes();
+                            fos.write(b);
+                            fos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
+                    }
+                }
+            });
+
+
+            SaveHL.setOnAction(new EventHandler<ActionEvent>()
+             {
+                @Override
+                public void handle(ActionEvent event) {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Save File with high-level stream");
+                    File file = fileChooser.showSaveDialog(null);
+                    
+                    if (file != null) {
+                        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) 
+                        {
+                            byte[] b = ta.getText().getBytes();
+                            dos.write(b);
+                            dos.close();
+                        } 
+                        
+                        catch (IOException e) 
+                        
+                        
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
             
+            
 
-            Exit.setOnAction(new EventHandler<ActionEvent>() {
+            Exit.setOnAction(new EventHandler<ActionEvent>() 
+            {
                 public void handle(ActionEvent event){
 
                     Aboutalert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -212,7 +280,7 @@ public class NotePad extends Application{
         
                     Optional<ButtonType> result = Aboutalert.showAndWait();
                     if (result.isPresent() && result.get() == ButtonType.OK) {
-                        System.exit(0); // Close the application
+                        System.exit(0);
                     }
                     
                 }
