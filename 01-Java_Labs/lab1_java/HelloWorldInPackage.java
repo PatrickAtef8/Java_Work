@@ -1,7 +1,5 @@
 
-
 package myFirstpkg;
-
 
 class HelloWorldInPackage
 {
