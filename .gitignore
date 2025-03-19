@@ -1,1 +1,24 @@
+# Ignore build artifacts
+ClientApp/target/
+ServerApp/target/
+
+# Ignore Maven wrapper files (if present)
+mvnw
+mvnw.cmd
+
+# Ignore NetBeans-specific files
+ClientApp/nbactions.xml
+
+# Ignore compiled Java files (if manually created)
 *.class
+
+# Ignore log files
+*.log
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE settings (if using IntelliJ or VSCode)
+.idea/
+.vscode/
