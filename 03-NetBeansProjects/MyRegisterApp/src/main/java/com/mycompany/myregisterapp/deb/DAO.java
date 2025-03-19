@@ -17,6 +17,9 @@ public class DAO {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             result = statement.executeUpdate();
+            //statement.close();
+            //connection.close();
+        
         }
         return result;
     }
@@ -29,8 +32,8 @@ public class DAO {
             statement.setString(2, user.getPassword());
             ResultSet rs = statement.executeQuery();
             result = rs.next(); 
-             statement.close();
-            connection.close();
+            //statement.close();
+            //connection.close();
         } catch (SQLException e) {
         }
         return result;
