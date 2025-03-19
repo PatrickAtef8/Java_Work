@@ -1,29 +1,27 @@
-# Ignore build artifacts
-**/target/
+# Ignore build and target directories
+target/
+
+# Ignore Maven specific files
 **/maven-status/
+**/maven-compiler-plugin/
 **/generated-sources/
+
+# Ignore compiled Java classes
 **/*.class
-**/*.jar
-**/*.war
-**/*.ear
-**/*.lst
 
-# Ignore Maven wrapper files
-mvnw
-mvnw.cmd
+# Ignore NetBeans specific files
+nbactions.xml
 
-# Ignore NetBeans-specific files
-**/nbactions.xml
-**/nb-configuration.xml
-**/nbproject/private/
+# Ignore logs and temp files
+*.log
+*.tmp
 
-# Ignore IntelliJ and VS Code settings
-.idea/
-.vscode/
+# Ignore IDE-specific files
+/.idea/
+*.iml
+*.ipr
+*.iws
 
 # Ignore OS-specific files
 .DS_Store
 Thumbs.db
-
-# Ignore log files
-*.log
