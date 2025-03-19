@@ -46,7 +46,7 @@ public class PrimaryController {
 
     public PrimaryController() {
         try {
-            server = new Socket("127.0.0.1", 5005);
+            server = new Socket("10.145.16.67", 4000);
             ear = new DataInputStream(server.getInputStream());
             mouth = new PrintStream(server.getOutputStream());
             L.start();
@@ -59,7 +59,8 @@ public class PrimaryController {
     @FXML
     private void sendMessage() {
         String message = TxtOut.getText();
-            mouth.println(message);
+            mouth.println("Patrick: "+ message);
+            TxtOut.clear();
         
     }
 }

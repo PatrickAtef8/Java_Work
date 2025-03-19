@@ -24,7 +24,7 @@ public class ServerApp {
 
     public ServerApp() {
         try {
-            serverSocket = new ServerSocket(5005);
+            serverSocket = new ServerSocket(4000);
             while (true) {
                 Socket s = serverSocket.accept();
                 new ChatHandler(s);
